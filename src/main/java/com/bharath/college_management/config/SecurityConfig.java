@@ -44,8 +44,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/signin").permitAll()
+                        .requestMatchers("/cm/get/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/cm/**").hasRole("ADMIN")
-                        .requestMatchers("/cm/get/**").hasRole("USER")
                         .anyRequest().authenticated());
         http.sessionManagement(
                 session ->
