@@ -6,6 +6,7 @@ import com.bharath.college_management.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public class DepartmentController {
     @Autowired
     DepartmentService departmentService;
 
-    @GetMapping(value = "d/get-all")
+
+    @GetMapping(value = "get/d/get-all")
     public ResponseEntity<List<Department>> getAllDepartments() {
         List<Department> departments = departmentService.getAllDepartments();
         return new ResponseEntity<>(departments, HttpStatus.OK);
@@ -29,7 +31,7 @@ public class DepartmentController {
         return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "d/sort/{depName}")
+    @GetMapping(value = "get/d/sort/{depName}")
     public ResponseEntity<List<Department>> getDepartmentsSortedByDepName(@PathVariable String depName) {
         List<Department> departments = departmentService.sortBasedOnDepartmentName(depName);
         return new ResponseEntity<>(departments, HttpStatus.OK);
