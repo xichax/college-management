@@ -16,7 +16,7 @@ public class StudentController {
     @Autowired
     StudentService studentService;
 
-    @GetMapping(value = "s/get-all")
+    @GetMapping(value = "get/s/get-all")
     public ResponseEntity<List<Student>> getAllStudents() {
         List<Student> students = studentService.getAllStudents();
         return new ResponseEntity<>(students, HttpStatus.OK);
@@ -28,13 +28,13 @@ public class StudentController {
         return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "s/{studentId}")
+    @GetMapping(value = "get/s/{studentId}")
     public ResponseEntity<Student> getStudentById(@PathVariable String studentId) {
         Student foundStudent = studentService.getStudentById(studentId);
         return new ResponseEntity<>(foundStudent, HttpStatus.FOUND);
     }
 
-    @GetMapping(value = "s/age/{age}")
+    @GetMapping(value = "get/s/age/{age}")
     public ResponseEntity<List<Student>> getStudentsByAge(@PathVariable int age) {
         List<Student> students = studentService.getStudentByAge(age);
         return new ResponseEntity<>(students, HttpStatus.OK);
@@ -52,7 +52,7 @@ public class StudentController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("s/page")
+    @GetMapping("get/s/page")
     public ResponseEntity<List<Student>> getAllStudents(@RequestParam int page, @RequestParam int size) {
         List<Student> students = studentService.getStudentsInPages(page, size);
         return new ResponseEntity<>(students, HttpStatus.OK);

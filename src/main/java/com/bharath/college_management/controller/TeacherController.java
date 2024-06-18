@@ -16,12 +16,14 @@ public class TeacherController {
     @Autowired
     TeacherService teacherService;
 
-    @GetMapping(value = "/t/get-all")
+    //    @PreAuthorize("hasRole('USER')")
+    @GetMapping(value = "get/t/get-all")
     public ResponseEntity<List<Teacher>> getAllTeachers() {
         List<Teacher> teachers = teacherService.getAllTeachers();
         return new ResponseEntity<>(teachers, HttpStatus.OK);
     }
 
+    //    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "/t/create")
     public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) {
         Teacher createdTeacher = teacherService.saveTeacher(teacher);
@@ -29,7 +31,7 @@ public class TeacherController {
     }
 
 
-    @GetMapping("/age")
+    @GetMapping("get/age")
     public ResponseEntity<List<Teacher>> getTeacherByAge(@RequestParam int age) {
         List<Teacher> teachers = teacherService.getTeacherByAge(age);
         return new ResponseEntity<>(teachers, HttpStatus.OK);
@@ -47,7 +49,7 @@ public class TeacherController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("t/page")
+    @GetMapping("get/t/page")
     public ResponseEntity<List<Teacher>> getTeachersInPages(@RequestParam int page, @RequestParam int size) {
         List<Teacher> teachers = teacherService.getTeachersInPages(page, size);
         return new ResponseEntity<>(teachers, HttpStatus.OK);

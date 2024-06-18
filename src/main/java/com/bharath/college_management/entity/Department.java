@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "department")
-@Builder
+//@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Department {
     @Id
