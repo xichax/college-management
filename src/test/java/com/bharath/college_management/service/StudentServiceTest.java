@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-class StudentServiceImplTest {
+class StudentServiceTest {
 
     @Mock
     private StudentRepository studentRepository;

@@ -1,7 +1,6 @@
 package com.bharath.college_management.controller;
 
 
-import com.bharath.college_management.config.TestConfig;
 import com.bharath.college_management.config.jwt.JwtUtils;
 import com.bharath.college_management.entity.Department;
 import com.bharath.college_management.service.DepartmentService;

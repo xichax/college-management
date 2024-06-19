@@ -27,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-class DepartmentServiceImplTest {
+class DepartmentServiceTest {
 
     @Mock
     private DepartmentRepository departmentRepository;

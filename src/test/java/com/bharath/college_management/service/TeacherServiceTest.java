@@ -1,11 +1,7 @@
 package com.bharath.college_management.service;
 
-import com.bharath.college_management.Exceptions.BranchInvalidException;
-import com.bharath.college_management.Exceptions.DepartmentNotFoundException;
-import com.bharath.college_management.Exceptions.TeacherNotFoundException;
 import com.bharath.college_management.entity.Department;
 import com.bharath.college_management.entity.Teacher;
-import com.bharath.college_management.enums.Branch;
 import com.bharath.college_management.repository.DepartmentRepository;
 import com.bharath.college_management.repository.TeacherRepository;
 import com.bharath.college_management.service.impl.TeacherServiceImpl;
@@ -16,14 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +27,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-class TeacherServiceImplTest {
+class TeacherServiceTest {
 
     @Mock
     private TeacherRepository teacherRepository;
