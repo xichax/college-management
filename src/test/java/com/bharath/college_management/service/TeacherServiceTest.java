@@ -1,5 +1,6 @@
 package com.bharath.college_management.service;
 
+import com.bharath.college_management.Exceptions.TeacherNotFoundException;
 import com.bharath.college_management.entity.Department;
 import com.bharath.college_management.entity.Teacher;
 import com.bharath.college_management.repository.DepartmentRepository;
@@ -18,16 +19,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithMockUser;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@WithMockUser(username = "admin", authorities = { "ADMIN", "USER" })
-class TeacherServiceTest {
+public class TeacherServiceTest {
 
     @Mock
     private TeacherRepository teacherRepository;
@@ -44,19 +42,21 @@ class TeacherServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        teacher = new Teacher("1", "T1", "John Doe", 30, null, null, null, "Computer Science");
-        department = new Department("1", "Computer Science", "CS", true, null, null, null, null);
+        teacher = new Teacher("1", "T1", "Jane Smith", 30, null, null, null, "CSE");
+        department = new Department("1", "CSE", "CS", true, null, null, null, null);
+        department.setTeachers(new ArrayList<>());
     }
 
     @Test
     void testSaveTeacher() {
-        when(departmentRepository.findByDepartmentId("Computer Science")).thenReturn(Optional.of(department));
         when(teacherRepository.save(any(Teacher.class))).thenReturn(teacher);
+        when(departmentRepository.findByDepartmentId(teacher.getTeacherDepartmentId())).thenReturn(Optional.of(department));
+        when(departmentRepository.save(any(Department.class))).thenReturn(department);
 
         Teacher savedTeacher = teacherService.saveTeacher(teacher);
 
         assertNotNull(savedTeacher);
-        assertEquals("John Doe", savedTeacher.getTeacherName());
+        assertEquals("Jane Smith", savedTeacher.getTeacherName());
         verify(departmentRepository, times(1)).save(department);
     }
 
@@ -83,37 +83,49 @@ class TeacherServiceTest {
 
     @Test
     void testUpdateTeacher() {
-        Teacher updatedTeacher = new Teacher("1", "T1", "Jane Doe", 31, null, null, null, "Computer Science");
+        Teacher existingTeacher = new Teacher("1", "T1", "Alice Smith", 34, null, null, null, "CSE");
+        Teacher updatedTeacher = new Teacher("1", "T1", "Bob Johnson", 32, null, null, null, "MME");
 
-        when(teacherRepository.findById("1")).thenReturn(Optional.of(teacher));
-        when(teacherRepository.save(updatedTeacher)).thenReturn(updatedTeacher);
+        when(teacherRepository.findById("1")).thenReturn(Optional.of(existingTeacher));
+        when(teacherRepository.save(any(Teacher.class))).thenReturn(updatedTeacher);
 
-        assertEquals("Jane Doe", teacherService.updateTeacher("1", updatedTeacher).getTeacherName());
+        Teacher result = teacherService.updateTeacher("1", updatedTeacher);
+
+        assertNotNull(result);
+        assertEquals("Bob Johnson", result.getTeacherName());
+        assertEquals("MME", result.getTeacherDepartmentId());
+        verify(teacherRepository, times(1)).save(existingTeacher);
     }
 
     @Test
     void testDeleteTeacher() {
         when(teacherRepository.findByTeacherId("1")).thenReturn(Optional.of(teacher));
+        when(departmentRepository.findByDepartmentId("CSE")).thenReturn(Optional.of(department));
 
         teacherService.deleteTeacher("1");
 
         verify(departmentRepository, times(1)).save(department);
         verify(teacherRepository, times(1)).delete(teacher);
+        assertFalse(department.getTeachers().contains(teacher));
     }
 
     @Test
     void testGetTeachersInPages() {
+        Teacher teacher1 = new Teacher("1", "T1", "Bob Johnson", 32, null, null, null, "MME");
         Pageable pageable = PageRequest.of(0, 2);
-        Page<Teacher> teacherPage = new PageImpl<>(Collections.singletonList(teacher));
+        List<Teacher> teachers = Arrays.asList(teacher, teacher1);
+        Page<Teacher> teacherPage = new PageImpl<>(teachers);
 
         when(teacherRepository.findAll(pageable)).thenReturn(teacherPage);
 
-        List<Teacher> teachers = teacherService.getTeachersInPages(0, 2);
+        List<Teacher> result = teacherService.getTeachersInPages(0, 2);
 
-        assertEquals(1, teachers.size());
-        assertEquals("CSE", teachers.get(0).getTeacherDepartmentId());
+        assertEquals(2, result.size());
+        assertEquals("Jane Smith", result.get(0).getTeacherName());
+        assertEquals("Bob Johnson", result.get(1).getTeacherName());
     }
-
 }
+
+
 
 
