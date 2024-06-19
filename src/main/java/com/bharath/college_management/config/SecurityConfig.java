@@ -44,6 +44,7 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests.requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/signin").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/cm/get/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/cm/**").hasRole("ADMIN")
                         .anyRequest().authenticated());
